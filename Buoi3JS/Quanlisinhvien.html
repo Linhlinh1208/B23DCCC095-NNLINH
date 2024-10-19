@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        padding: 0px;
+        margin: 0px;
+        padding-top: 20px;
+    }
+
+    #form {
+        margin: 50px;
+        padding: 20px;
+        background-color: aqua;
+        border: 1px solid black;
+        float: left
+    }
+
+    h1 {
+        padding: 30px;
+        margin-left: 25px;
+        padding-top: 1px;
+    }
+
+    #form label {
+        float: left;
+        width: 100px;
+    }
+
+    #form input[type="text"],
+    input[type="date"] {
+        width: 200px;
+        padding: 5px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    #table {
+        margin-left: 10px;
+        width: 65%;
+        background-color: aquamarine;
+        float: left;
+        border: 1px solid black;
+    }
+
+    table,
+    tr,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+<body>
+    <div id="form">
+        <h1>Thông tin sinh viên</h1>
+
+        <label>Mã sinh viên:</label>
+        <input type="text" id="msv">
+        <br>
+
+        <label>Tên sinh viên:</label>
+        <input type="text" id="fullname">
+        <br>
+
+        <label>Ngày sinh:</label>
+        <input type="date" id="ngaysinh">
+        <br>
+
+        <label>Quê quán:</label>
+        <input type="text" id="que">
+        <br>
+        <label>Giới tính:</label>
+        <input type="radio" name="gioitinh">Nam
+        <input type="radio" name="gioitinh">Nữ
+        <br>
+        <button onclick="update()" id="addbutton">update</button>
+    </div>
+    <div id="table">
+        <table style="width: 100%;">
+            <tr>
+                <h1>Bảng thông tin sinh viên</h1>
+            </tr>
+            <th>Mã sinh viên</th>
+            <th>Tên sinh viên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Quê quán</th>
+            <th>Active</th>
+        </table>
+    </div>
+    <script>
+    </script>
+</body>
+
+</html>
