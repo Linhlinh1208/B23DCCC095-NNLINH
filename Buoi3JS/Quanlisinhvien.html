@@ -4,98 +4,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Quản lý sinh viên</title>
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+            padding-top: 20px;
+        }
+
+        #form {
+            margin: 50px;
+            padding: 20px;
+            background-color: aqua;
+            border: 1px solid black;
+            float: left;
+        }
+
+        h1 {
+            padding: 30px;
+            margin-left: 25px;
+            padding-top: 1px;
+        }
+
+        #form label {
+            float: left;
+            width: 100px;
+        }
+
+        #form input[type="text"],
+        input[type="date"] {
+            width: 200px;
+            padding: 5px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        #table {
+            margin-left: 10px;
+            width: 65%;
+            background-color: aquamarine;
+            float: left;
+            border: 1px solid black;
+        }
+
+        table,
+        tr,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        #buttonform {
+            border-radius: 50px;
+        }
+    </style>
 </head>
-<style>
-    body {
-        padding: 0px;
-        margin: 0px;
-        padding-top: 20px;
-    }
-
-    #form {
-        margin: 50px;
-        padding: 20px;
-        background-color: aqua;
-        border: 1px solid black;
-        float: left
-    }
-
-    h1 {
-        padding: 30px;
-        margin-left: 25px;
-        padding-top: 1px;
-    }
-
-    #form label {
-        float: left;
-        width: 100px;
-    }
-
-    #form input[type="text"],
-    input[type="date"] {
-        width: 200px;
-        padding: 5px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-
-    #table {
-        margin-left: 10px;
-        width: 65%;
-        background-color: aquamarine;
-        float: left;
-        border: 1px solid black;
-    }
-
-    table,
-    tr,
-    th,
-    td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-</style>
 
 <body>
     <div id="form">
         <h1>Thông tin sinh viên</h1>
-
         <label>Mã sinh viên:</label>
-        <input type="text" id="msv">
+        <input type="text" id="msv" required>
         <br>
-
         <label>Tên sinh viên:</label>
-        <input type="text" id="fullname">
+        <input type="text" id="fullname" required>
         <br>
-
         <label>Ngày sinh:</label>
-        <input type="date" id="ngaysinh">
+        <input type="date" id="ngaysinh" required>
         <br>
-
         <label>Quê quán:</label>
-        <input type="text" id="que">
+        <input type="text" id="que" required>
         <br>
         <label>Giới tính:</label>
-        <input type="radio" name="gioitinh">Nam
-        <input type="radio" name="gioitinh">Nữ
+        <input type="radio" name="gioitinh" value="Nam" required>Nam
+        <input type="radio" name="gioitinh" value="Nữ">Nữ
         <br>
-        <button onclick="update()" id="addbutton">update</button>
+        <button id="buttonform">Thêm</button>
     </div>
     <div id="table">
-        <table style="width: 100%;">
-            <tr>
-                <h1>Bảng thông tin sinh viên</h1>
-            </tr>
-            <th>Mã sinh viên</th>
-            <th>Tên sinh viên</th>
-            <th>Ngày sinh</th>
-            <th>Giới tính</th>
-            <th>Quê quán</th>
-            <th>Active</th>
+        <h1>Bảng thông tin sinh viên</h1>
+        <table style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Mã sinh viên</th>
+                    <th>Tên sinh viên</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Quê quán</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="studentList"></tbody>
         </table>
     </div>
     <script>
+        const studentList = document.getElementById('studentList');
+        const MSV = document.getElementById('msv');
+        const FullName = document.getElementById('fullname');
+        const NgaySinh = document.getElementById('ngaysinh');
+        const Que = document.getElementById('que');
+        const buttonform = document.getElementById('buttonform');
+
+        let students = [];
+
+        buttonform.onclick = function () {
+            const msv = MSV.value;
+            const fullname = FullName.value;
+            const ngaysinh = NgaySinh.value;
+            const que = Que.value;
+            const gioitinh = document.querySelector('input[name="gioitinh"]:checked').value;
+
+            if (msv && fullname && ngaysinh && que) {
+                const student = { msv, fullname, ngaysinh, gioitinh, que };
+                students.push(student);
+                Render();
+                clearForm();
+            }
+        };
+
+        function Render() {
+            studentList.innerHTML = '';
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML =
+                    `<td>${student.msv}</td>
+                    <td>${student.fullname}</td>
+                    <td>${student.ngaysinh}</td>
+                    <td>${student.gioitinh}</td>
+                    <td>${student.que}</td>
+                    <td>
+                        <button onclick="editStudent(${index})">
+                            <a>
+                                <i class='bx bxs-cog'></i>
+                                <span>Sửa</span>
+                            </a>
+                        </button>
+                        <button onclick="deleteStudent(${index})">
+                            <a> <i class='bx bxs-trash' ></i>
+                            <span>Xóa</span>
+                            </a?>
+                        </button>
+                    </td>`
+                    ;
+                studentList.appendChild(row);
+            });
+        }
+
+        function clearForm() {
+            MSV.value = '';
+            FullName.value = '';
+            NgaySinh.value = '';
+            Que.value = '';
+            document.querySelector('input[name="gioitinh"]:checked').checked = false;
+        }
+
+        function editStudent(index) {
+            const student = students[index];
+            MSV.value = student.msv;
+            FullName.value = student.fullname;
+            NgaySinh.value = student.ngaysinh;
+            Que.value = student.que;
+            document.querySelector(`input[name="gioitinh"][value="${student.gioitinh}"]`).checked = true;
+            buttonform.textContent = 'Cập nhật';
+            buttonform.onclick = function () {
+                updateStudent(index);
+            };
+        }
+
+        function updateStudent(index) {
+            students[index] = {
+                msv: MSV.value,
+                fullname: FullName.value,
+                ngaysinh: NgaySinh.value,
+                gioitinh: document.querySelector('input[name="gioitinh"]:checked').value,
+                que: Que.value
+            };
+            Render();
+            clearForm();
+            buttonform.textContent = 'Thêm';
+            buttonform.onclick = function () {
+                const msv = MSV.value;
+                const fullname = FullName.value;
+                const ngaysinh = NgaySinh.value;
+                const que = Que.value;
+                const gioitinh = document.querySelector('input[name="gioitinh"]:checked').value;
+
+                if (msv && fullname && ngaysinh && que) {
+                    const student = { msv, fullname, ngaysinh, gioitinh, que };
+                    students.push(student);
+                    Render();
+                    clearForm();
+                }
+            };
+        }
+
+        function deleteStudent(index) {
+            students.splice(index, 1);
+            Render();
+        }
     </script>
 </body>
 
